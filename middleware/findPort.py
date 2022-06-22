@@ -15,22 +15,28 @@ def find_USB_device():
     
     return usb_port_list
 
-if __name__ == "__main__":
-    list_a = ["Hello", 2, 15, "World", 34]
+def HMI_cmd():
+    list_port=list(range(2))
     ports= find_USB_device()
     portNums=len(ports)
-    print(list_a)
     if portNums==1:
      print("You got this port")
      print(ports)
+    
      chy=input("If You one Just use Robot in solo mode press y ...")
      if chy=='y':
          chMelfa=ports[0]
+         list_port.append(ports)
+         return list_port
     elif portNums==0:
            print("PLease Connect User and Robot Device ")
+           return list_port
     elif portNums==2:
       print("You got this ports")
       print(ports)
       chMelfa=input("Choose Robot Port: ")
       chUser=input("Choose UserSystem Port: ")
-    print("Robot Port : "+chMelfa)
+      list_port.append(chMelfa)
+      list_port.append(chUser)
+      return list_port
+    
