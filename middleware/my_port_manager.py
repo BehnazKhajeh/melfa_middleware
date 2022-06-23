@@ -15,13 +15,17 @@ def find_USB_device():
     
     return usb_port_list
 
-    
+def get_num_port():
+    return  len(find_USB_device())  
+
 class _port_manager():
 
   ports_user=""
   ports_melfa=""
   def set_port_melfa(self,mPort):
     self.ports_melfa=mPort
+  def get_port_melfa(self):
+    return self.ports_melfa
   def set_port_user(self,uPort):
     self.ports_user=uPort
         
