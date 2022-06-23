@@ -16,7 +16,10 @@ import random
 from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 
-class mWindow(QMainWindow):  
+#inherient from my_port_manager :Check not to take same port
+from my_port_manager import _port_manager
+
+class mWindow(QMainWindow,_port_manager):  
     
 
     def __init__(self):
@@ -54,33 +57,19 @@ class mWindow(QMainWindow):
     def clickedr(self, qmodelindex):
       
       item = self.list_portsr.currentItem()
-      m=my_port_manager()
-      m.set_port_melfa(item.text())
-      m.check_port()
-      #print("Robot Port :"+item.text())
+    
+      self.set_port_melfa(item.text())
+      self.check_port()
+      # print("Robot Port :"+item.text())
     def clickedu(self, qmodelindex):
       item = self.list_portsu.currentItem()
-      #print("User Port :"+item.text())
-      m=my_port_manager()
-      m.set_port_user(item.text())
-      m.check_port()
+      # print("User Port :"+item.text())
+     
+      self.set_port_user(item.text())
+      self.check_port()
    
-        
-class my_port_manager():
-  def __init__(self):
-      self.ports_user=NULL
-      self.ports_melfa=NULL
-  def set_port_melfa(self,mPort):
-    self.ports_melfa=mPort
-  def set_port_user(self,uPort):
-    self.ports_user=uPort
-        
-  def check_port(self):
-      if (self.ports_melfa==self.ports_user):
-        print("com == com")
-      else:
-        print("Robot Port :"+self.ports_melfa.text())
-        print("user Port :"+self.ports.user.text())
+ 
+
 def window():
 
     app=QApplication(sys.argv)
