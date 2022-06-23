@@ -35,23 +35,24 @@ class mWindow(QMainWindow,_port_manager):
         self.initUI()
     def initUI(self):
 
-
-          #Refresh button
           lists_ports=my_port_manager.find_USB_device()
+          #Refresh button
+          
           self.btn_refresh=QtWidgets.QPushButton(self)
           self.btn_refresh.setText("Refresh Middleware")
           self.btn_refresh.setGeometry(200, 150, 120, 50)
           self.btn_refresh.move(260,30)
           self.btn_refresh.setStyleSheet("background-color : #F9D923")
+          self.btn_refresh.clicked.connect(self.refresh)
           #Start button
-          lists_ports=my_port_manager.find_USB_device()
+         
           self.btn_start=QtWidgets.QPushButton(self)
           self.btn_start.setText("Start Middleware")
           self.btn_start.setGeometry(200, 150, 120, 50)
           self.btn_start.move(260,90)
           self.btn_start.setStyleSheet("background-color : #76BA99")
           #Stop button
-          lists_ports=my_port_manager.find_USB_device()
+         
           self.btn_stop=QtWidgets.QPushButton(self)
           self.btn_stop.setText("Stop Middleware")
           self.btn_stop.setGeometry(200, 150, 120, 50)
@@ -113,6 +114,14 @@ class mWindow(QMainWindow,_port_manager):
      
       self.set_port_user(item.text())
       self.check_port()
+
+    def refresh(self):
+         lists_ports=my_port_manager.find_USB_device()
+         self.list_portsr.clear()
+         self.list_portsu.clear()
+         self.list_portsr.addItems(lists_ports)
+         self.list_portsu.addItems(lists_ports)
+     
     def btnstate(self,state):
     
          if state == QtCore.Qt.Checked:

@@ -18,6 +18,8 @@ def find_USB_device():
 def get_num_port():
     return  len(find_USB_device())  
 
+
+#Todo:// Make Port Allocation ........
 class _port_manager():
 
   ports_user=""
@@ -30,8 +32,12 @@ class _port_manager():
     self.ports_user=uPort
         
   def check_port(self):
-      if (self.ports_melfa==self.ports_user and self.ports_melfa!=""):
+      
+      if (self.ports_melfa==self.ports_user):
+        
         print("com == com")
+        return False
       else:
         print("Robot Port :"+self.ports_melfa)
         print("user Port :"+self.ports_user)
+        return True
