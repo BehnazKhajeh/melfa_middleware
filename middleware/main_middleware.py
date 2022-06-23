@@ -10,7 +10,7 @@ from time import sleep, perf_counter
 from threading import Thread
 import threading
 import time
-import findPort
+
 import sys
 import random
 from PySide6 import QtCore, QtWidgets, QtGui
@@ -18,7 +18,7 @@ from PySide6.QtWidgets import *
 
 #inherient from my_port_manager :Check not to take same port
 from my_port_manager import _port_manager
-
+import my_port_manager
 class mWindow(QMainWindow,_port_manager):  
     
 
@@ -30,7 +30,7 @@ class mWindow(QMainWindow,_port_manager):
         self.setWindowTitle(title)
         self.initUI()
     def initUI(self):
-          lists_ports=findPort.find_USB_device()
+          lists_ports=my_port_manager.find_USB_device()
           # Robo label
           self.label_portr=QtWidgets.QLabel(self)
           self.label_portr.setText("Select Robo Port")
