@@ -19,12 +19,13 @@ from PySide6.QtWidgets import *
 #inherient from my_port_manager :Check not to take same port
 from my_port_manager import _port_manager
 import my_port_manager
+
 class mWindow(QMainWindow,_port_manager):  
     
 
     def __init__(self):
         title="Melfa Middleware V1"
-
+        self.flag_stop=False
         super(mWindow,self).__init__()
 
         #Window Size Here
@@ -51,6 +52,7 @@ class mWindow(QMainWindow,_port_manager):
           self.btn_start.setGeometry(200, 150, 120, 50)
           self.btn_start.move(260,90)
           self.btn_start.setStyleSheet("background-color : #76BA99")
+          self.btn_start.clicked.connect(self.btnstart)
           #Stop button
          
           self.btn_stop=QtWidgets.QPushButton(self)
@@ -58,6 +60,7 @@ class mWindow(QMainWindow,_port_manager):
           self.btn_stop.setGeometry(200, 150, 120, 50)
           self.btn_stop.move(260,150)
           self.btn_stop.setStyleSheet("background-color : #DA1212")
+          self.btn_stop.clicked.connect(self.btnstop)
           # Middleware state label
           self.label_state=QtWidgets.QLabel(self)
           self.label_state.setText("Middleware State")
@@ -82,7 +85,7 @@ class mWindow(QMainWindow,_port_manager):
           self.label_portu.move(500,10)
           #User CheckBox
           self.check_user=QtWidgets.QCheckBox("direct user?",self)
-          self.check_user.stateChanged.connect(self.btnstate)
+          self.check_user.stateChanged.connect(self.btncheck)
           self.check_user.move(410,40)
           # User Port
           self.list_portsu=QtWidgets.QListWidget(self)
@@ -131,14 +134,59 @@ class mWindow(QMainWindow,_port_manager):
          self.label_portu_name.setText("User Port")
          self.ports_melfa=""
          self.ports_user=""
-    def btnstate(self,state):
+
+    def btncheck(self,state):
     
          if state == QtCore.Qt.Checked:
-            print (" is selected")
+            # print (" is selected")
+            # self.direct_user=True
             self.list_portsu.setEnabled(True)
          else:
-            print (" is deselected")
+            # print (" is deselected")
+            # self.direct_user=False
             self.list_portsu.setEnabled(False)
+    def btnstart(self):
+      if self.ports_melfa=="":
+        self.label_state.setText("First choose Robo port please!")
+      else:
+        #Disable all button ...
+        self.btn_refresh.setEnabled(False)
+        self.btn_start.setEnabled(False)
+        self.check_user.setEnabled(False)
+        self.list_portsr.setEnabled(False)
+        self.list_portsu.setEnabled(False)
+        #make connection and do stuff ...
+        self.thread_stop=False
+        self.terminal()
+        msg=self.start()
+        self.label_state.setText(msg)
+    def btnstop(self):
+      self.thread_stop=True
+      self.flag_stop=True
+      ######
+
+      #####
+      self.btn_refresh.setEnabled(True)
+      self.btn_start.setEnabled(True)
+      self.check_user.setEnabled(True)
+      self.list_portsr.setEnabled(True)
+      self.list_portsu.setEnabled(True)
+      
+    def terminal(self):
+      thread_terminal=threading.Thread(target=self.update_terminal)
+      thread_terminal.start()
+    def update_terminal(self):
+   
+        while(True):
+          if self.flag_stop:
+            break
+          else: 
+            
+             #self.list_connection_command.addItem("Robot "+"-->"+msg.decode("utf-8"))
+             #self.list_connection_command.addItem("D-U "+"-->"+self.user_line)
+             time.sleep(1)
+
+
 
 
  
