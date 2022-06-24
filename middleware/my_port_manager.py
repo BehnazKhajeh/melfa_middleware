@@ -21,23 +21,32 @@ def get_num_port():
 
 #Todo:// Make Port Allocation ........
 class _port_manager():
-
+#port getter and setter
   ports_user=""
   ports_melfa=""
+  #melfa port
   def set_port_melfa(self,mPort):
-    self.ports_melfa=mPort
+    return self.check_port(mPort,self.ports_user)
+    
   def get_port_melfa(self):
     return self.ports_melfa
+  #user Port
   def set_port_user(self,uPort):
-    self.ports_user=uPort
+    return self.check_port(self.ports_melfa,uPort)
+
+  def get_port_user(self):
+    return self.ports_user
+
         
-  def check_port(self):
-      
-      if (self.ports_melfa==self.ports_user):
+  def check_port(self,pMelfa,pUser):
+
+      if (pMelfa==""):
+        return "Select Robot Port First!"
+      if (pMelfa==pUser):
         
-        print("com == com")
-        return False
+        return "Robot port and Direct-User port cannot \nbe the same ! "
       else:
-        print("Robot Port :"+self.ports_melfa)
-        print("user Port :"+self.ports_user)
-        return True
+         self.ports_user=pUser
+         self.ports_melfa=pMelfa
+         #Here We must check athourization of robot and show the poroper message
+         return "ok"

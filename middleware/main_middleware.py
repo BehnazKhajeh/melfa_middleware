@@ -59,9 +59,9 @@ class mWindow(QMainWindow,_port_manager):
           self.btn_stop.move(260,150)
           self.btn_stop.setStyleSheet("background-color : #DA1212")
           # Middleware state label
-          self.label_portr=QtWidgets.QLabel(self)
-          self.label_portr.setText("Middleware State")
-          self.label_portr.move(275,5)
+          self.label_state=QtWidgets.QLabel(self)
+          self.label_state.setText("Middleware State")
+          self.label_state.setGeometry(410, 110, 300, 40)
           #Check state and the choose color of state 
           # Robo label
           self.label_portr=QtWidgets.QLabel(self)
@@ -91,29 +91,34 @@ class mWindow(QMainWindow,_port_manager):
           self.list_portsu.clicked.connect(self.clickedu)
           self.list_portsu.setEnabled(False)
           # User label port name <---------------- Here
-          self.label_portr_name=QtWidgets.QLabel(self)
-          self.label_portr_name.setText("User Port")
-          self.label_portr_name.move(500,70)
+          self.label_portu_name=QtWidgets.QLabel(self)
+          self.label_portu_name.setText("User Port")
+          self.label_portu_name.move(500,70)
           #Connection ListVIew
           self.list_connection_command=QtWidgets.QListWidget(self)
           self.list_connection_command.setGeometry(50, 220, 550, 250)
 
-    def show_selected_port(self):
-        self.label_portr_name.setText(self.get_port_melfa())      
+
+        
     def clickedr(self, qmodelindex):
       
       item = self.list_portsr.currentItem()
+      msg=self.set_port_melfa(item.text())
+      if msg=="ok": 
+        
+        self.label_portr_name.setText(item.text()) 
+        self.label_state.setText(msg)     
+      else:
+        self.label_state.setText(msg)
     
-      self.set_port_melfa(item.text())
-      self.check_port()
-      
-      # print("Robot Port :"+item.text())
     def clickedu(self, qmodelindex):
       item = self.list_portsu.currentItem()
-      # print("User Port :"+item.text())
-     
-      self.set_port_user(item.text())
-      self.check_port()
+      msg=self.set_port_user(item.text())
+      if msg=="ok":   
+        self.label_portu_name.setText(item.text())
+        self.label_state.setText(msg)       
+      else:
+        self.label_state.setText(msg)
 
     def refresh(self):
          lists_ports=my_port_manager.find_USB_device()
@@ -121,7 +126,11 @@ class mWindow(QMainWindow,_port_manager):
          self.list_portsu.clear()
          self.list_portsr.addItems(lists_ports)
          self.list_portsu.addItems(lists_ports)
-     
+         self.label_state.clear()
+         self.label_portr_name.setText("Robo Port")
+         self.label_portu_name.setText("User Port")
+         self.ports_melfa=""
+         self.ports_user=""
     def btnstate(self,state):
     
          if state == QtCore.Qt.Checked:
