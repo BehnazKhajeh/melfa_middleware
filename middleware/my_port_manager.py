@@ -26,7 +26,10 @@ class _port_manager():
 #port getter and setter
   ports_user=""
   ports_melfa=""
-  thread_stop=False;
+  melfa_line=""
+  timeout=1
+  baudrate=9600
+  thread_stop=False
   # def __init__(self):
   #   #self.OnMessageArrive=Event()
     
@@ -63,8 +66,7 @@ class _port_manager():
       self.start_melfa_port()
       self.Mthread=threading.Thread(target=self.thread_melfa)
       self.Mthread.start()
-      self.Uthread=threading.Thread(target=self.thread_user)
-      self.Uthread.start()
+
 
       return "Melfa port is connected"
     else: 
@@ -73,10 +75,11 @@ class _port_manager():
       self.start_user_port()
       self.Mthread=threading.Thread(target=self.thread_melfa)
       self.Mthread.start()
-
+      self.Uthread=threading.Thread(target=self.thread_user)
+      self.Uthread.start()
       #start reading and writing ...
       return "Melfa and Direct-user ports are connected"
- 
+  
   def thread_melfa(self):
    while True:
    
@@ -84,18 +87,18 @@ class _port_manager():
       self.melfa_serial.close()
       break
     else:
-      self.melfa_line=self.melfa_serial.readline()
- 
+      
+      self.melfa_line=self.melfa_serial.readline().decode("utf-8") 
       print(self.melfa_line)
      
 
   def thread_user(self):
     while True:
      if self.thread_stop:
-       #self.user_serial.close()
+       self.user_serial.close()
        break
      else:
-      self.user_line=self.melfa_serial.readline()
+      self.user_line=self.user_serial.readline()
    
       
 
@@ -108,7 +111,7 @@ class _port_manager():
         port=self.ports_melfa,
  
         #Rate at which the information is shared to the communication channel
-        baudrate = 9600,
+        baudrate = self.baudrate,
    
         #Applying Parity Checking (none in this case)
         parity=serial.PARITY_EVEN,
@@ -120,7 +123,7 @@ class _port_manager():
         bytesize=serial.EIGHTBITS,
         
         # Number of serial commands to accept before timing out
-        timeout=1
+        timeout=self.timeout
 
         )
   # user serial port
@@ -130,7 +133,7 @@ class _port_manager():
         port=self.ports_user,
  
         #Rate at which the information is shared to the communication channel
-        baudrate = 9600,
+        baudrate = self.baudrate,
    
         #Applying Parity Checking (none in this case)
         parity=serial.PARITY_EVEN,
@@ -142,6 +145,6 @@ class _port_manager():
         bytesize=serial.EIGHTBITS,
         
         # Number of serial commands to accept before timing out
-        timeout=1
+        timeout=self.timeout
 
         )

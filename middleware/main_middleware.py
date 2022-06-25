@@ -134,6 +134,7 @@ class mWindow(QMainWindow,_port_manager):
          self.label_portu_name.setText("User Port")
          self.ports_melfa=""
          self.ports_user=""
+         self.list_connection_command.clear()
 
     def btncheck(self,state):
     
@@ -157,6 +158,7 @@ class mWindow(QMainWindow,_port_manager):
         self.list_portsu.setEnabled(False)
         #make connection and do stuff ...
         self.thread_stop=False
+        self.flag_stop=False
         self.terminal()
         msg=self.start()
         self.label_state.setText(msg)
@@ -182,7 +184,7 @@ class mWindow(QMainWindow,_port_manager):
             break
           else: 
             
-             #self.list_connection_command.addItem("Robot "+"-->"+msg.decode("utf-8"))
+             self.list_connection_command.addItem("Robot "+"-->"+self.melfa_line)
              #self.list_connection_command.addItem("D-U "+"-->"+self.user_line)
              time.sleep(1)
 
