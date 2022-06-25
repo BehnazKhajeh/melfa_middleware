@@ -28,7 +28,8 @@ class _port_manager():
   ports_melfa=""
   melfa_line=""
   user_line=""
-  dt_rcv=False
+  dtm_rcv=False
+  dtu_rcv=False
   timeout=0.5
   baudrate=9600
   thread_stop=False
@@ -81,7 +82,8 @@ class _port_manager():
       self.Uthread.start()
       #start reading and writing ...
       return "Melfa and Direct-user ports are connected"
-  
+
+
   def thread_melfa(self):
    while True:
    
@@ -90,26 +92,41 @@ class _port_manager():
       break
     else:
       
-      rcv=self.melfa_serial.readline().decode("utf-8") 
-      if(rcv!=""):
-        self.dt_rcv=True
-        self.melfa_line=rcv
-        print(rcv)
+      rcv=self.melfa_serial.readline()
+      rcv_txt=rcv.decode("utf-8") 
+      if(rcv_txt!=""):
+        self.dtm_rcv=True
+        if(self.ports_user==""):
+
+          self.melfa_line=rcv_txt
+          print(rcv_txt)
+        else:
+          self.melfa_line=rcv_txt
+          self.user_serial.write(rcv)
+          print(rcv_txt)
+          
       else:
-        self.dt_rcv=False
-
-
-     
+        self.dtm_rcv=False
 
   def thread_user(self):
-    while True:
-     if self.thread_stop:
-       self.user_serial.close()
-       break
-     else:
-      self.user_line=self.user_serial.readline().decode("utf-8") 
+   while True:
    
+    if self.thread_stop:
+      self.user_serial.close()
+      break
+    else:
       
+      rcv=self.user_serial.readline()
+      rcv_txt=rcv.decode("utf-8") 
+      if(rcv_txt!=""):
+        self.dtu_rcv=True
+        self.user_line=rcv_txt
+        self.melfa_serial.write(rcv)
+        print(rcv_txt)
+      else:
+        self.dtu_rcv=False
+      
+  #def port_alloc():
 
 
 

@@ -183,9 +183,9 @@ class mWindow(QMainWindow,_port_manager):
           if self.flag_stop:
             break
           else: 
-             if(self.melfa_line!="" and self.dt_rcv):
+             if(self.melfa_line!="" and self.dtm_rcv):
               self.list_connection_command.addItem("Robot "+"-->"+self.melfa_line)
-             if (self.user_line!="" and self.dt_rcv):
+             if (self.user_line!="" and self.dtu_rcv):
                self.list_connection_command.addItem("D-U "+"-->"+self.user_line)
              time.sleep(self.timeout)
             
