@@ -27,7 +27,9 @@ class _port_manager():
   ports_user=""
   ports_melfa=""
   melfa_line=""
-  timeout=1
+  user_line=""
+  dt_rcv=False
+  timeout=0.5
   baudrate=9600
   thread_stop=False
   # def __init__(self):
@@ -60,7 +62,7 @@ class _port_manager():
          #Here We must check athourization of robot and show the poroper message
          return "ok"
   # melfa serial port
-  def start(self):
+  def start_port(self):
     if(self.ports_user==""):
       #connect melfa
       self.start_melfa_port()
@@ -88,8 +90,15 @@ class _port_manager():
       break
     else:
       
-      self.melfa_line=self.melfa_serial.readline().decode("utf-8") 
-      print(self.melfa_line)
+      rcv=self.melfa_serial.readline().decode("utf-8") 
+      if(rcv!=""):
+        self.dt_rcv=True
+        self.melfa_line=rcv
+        print(rcv)
+      else:
+        self.dt_rcv=False
+
+
      
 
   def thread_user(self):
@@ -98,7 +107,7 @@ class _port_manager():
        self.user_serial.close()
        break
      else:
-      self.user_line=self.user_serial.readline()
+      self.user_line=self.user_serial.readline().decode("utf-8") 
    
       
 
