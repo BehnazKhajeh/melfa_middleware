@@ -1,4 +1,5 @@
 from ast import Num
+
 from asyncio.windows_events import NULL
 from operator import itemgetter
 from tkinter import Y
@@ -19,8 +20,8 @@ from PySide6.QtWidgets import *
 #inherient from my_port_manager :Check not to take same port
 from my_port_manager import _port_manager
 import my_port_manager
-
-class mWindow(QMainWindow,_port_manager):  
+from SaveCommandManager import _save
+class mWindow(QMainWindow,_port_manager,_save):  
     
 
     def __init__(self):
@@ -100,9 +101,22 @@ class mWindow(QMainWindow,_port_manager):
           #Connection ListVIew
           self.list_connection_command=QtWidgets.QListWidget(self)
           self.list_connection_command.setGeometry(50, 220, 550, 250)
+          #Add Comment
+          self.Line_Comment=QtWidgets.QLineEdit(self)
+          self.Line_Comment.setText(" Add Comment Here")
+          self.Line_Comment.setStyleSheet("background-color : #413f42; color:#f2f2f2")
+          self.Line_Comment.editingFinished.connect(self.addComment)
+          self.Line_Comment.setGeometry(30, 120, 150, 50)
 
-
-        
+    def addComment(self):
+      t=self.Line_Comment.text()
+      if(t!=""):
+        print ("   <== "+self.Line_Comment.text()+ " ==>\n")
+        self.save("   <== "+self.Line_Comment.text()+ " ==>\n")
+        self.Line_Comment.clear()
+      else: 
+        print ("   <====>   \n")
+        self.save("   <====>   \n")
     def clickedr(self, qmodelindex):
       
       item = self.list_portsr.currentItem()
@@ -184,9 +198,12 @@ class mWindow(QMainWindow,_port_manager):
             break
           else: 
              if(self.melfa_line!="" and self.dtm_rcv):
+
               self.list_connection_command.addItem("Robot "+"-->"+self.melfa_line)
+              self.save("Robot "+"-->"+self.melfa_line)
              if (self.user_line!="" and self.dtu_rcv):
                self.list_connection_command.addItem("D-U "+"-->"+self.user_line)
+               self.save("D-U "+"-->"+self.user_line)
              time.sleep(self.timeout)
             
 

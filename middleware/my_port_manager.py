@@ -7,7 +7,7 @@ from time import sleep, perf_counter
 from threading import Thread
 import threading
 import time
-
+import codecs  
 def find_USB_device():
     myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
 
@@ -30,7 +30,8 @@ class _port_manager():
   user_line=""
   dtm_rcv=False
   dtu_rcv=False
-  timeout=0.5
+  timeout=0.05
+  writeTimeout=30
   baudrate=9600
   thread_stop=False
   # def __init__(self):
@@ -93,7 +94,9 @@ class _port_manager():
     else:
       
       rcv=self.melfa_serial.readline()
-      rcv_txt=rcv.decode("utf-8") 
+      rcv_txt=rcv.decode("UTF-8") 
+      #rcv_txt=rcv
+      #rcv_txt=codecs.decode(rcv,'UTF-8')
       if(rcv_txt!=""):
         self.dtm_rcv=True
         if(self.ports_user==""):
@@ -103,7 +106,7 @@ class _port_manager():
         else:
           self.melfa_line=rcv_txt
           self.user_serial.write(rcv)
-          print(rcv_txt)
+          print(rcv)
           
       else:
         self.dtm_rcv=False
@@ -117,12 +120,15 @@ class _port_manager():
     else:
       
       rcv=self.user_serial.readline()
-      rcv_txt=rcv.decode("utf-8") 
+       
+      rcv_txt=rcv.decode("UTF-8") 
+      #rcv_txt=rcv   
+      #rcv_txt=codecs.decode(rcv,'UTF-8')   
       if(rcv_txt!=""):
         self.dtu_rcv=True
         self.user_line=rcv_txt
         self.melfa_serial.write(rcv)
-        print(rcv_txt)
+        print(rcv)
       else:
         self.dtu_rcv=False
       
@@ -149,7 +155,8 @@ class _port_manager():
         bytesize=serial.EIGHTBITS,
         
         # Number of serial commands to accept before timing out
-        timeout=self.timeout
+        timeout=self.timeout,
+        write_timeout=self.writeTimeout
 
         )
   # user serial port
@@ -171,6 +178,7 @@ class _port_manager():
         bytesize=serial.EIGHTBITS,
         
         # Number of serial commands to accept before timing out
-        timeout=self.timeout
+        timeout=self.timeout,
+        write_timeout=self.writeTimeout
 
         )
